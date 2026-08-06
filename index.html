@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十堰 3 日旅行攻略 · 仙山秀水之旅</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2D5A3D',
+                        secondary: '#8B6914',
+                        accent: '#C17817',
+                        mist: '#E8EDE9',
+                        cloud: '#F5F7F6',
+                        ink: '#1A2E1F',
+                        stone: '#6B7B6E',
+                        water: '#3A7CA5',
+                        gold: '#B8860B',
+                    },
+                    fontFamily: {
+                        serif: ['Noto Serif SC', 'serif'],
+                        sans: ['Noto Sans SC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: #F5F7F6; }
+        .hero-section {
+            background: linear-gradient(135deg, #1a3a2a 0%, #2D5A3D 40%, #3A7CA5 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: 0; right: 0;
+            height: 100px;
+            background: #F5F7F6;
+            border-radius: 50% 50% 0 0;
+        }
+        .cloud-float {
+            animation: cloudFloat 6s ease-in-out infinite;
+        }
+        @keyframes cloudFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; opacity: 0; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(45,90,61,0.12); }
+        .timeline-line { 
+            position: relative;
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 60px;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #2D5A3D, #3A7CA5);
+        }
+        .day-badge {
+            background: linear-gradient(135deg, #2D5A3D, #3A7CA5);
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 700;
+            box-shadow: 0 4px 12px rgba(45,90,61,0.3);
+            position: relative; z-index: 2;
+        }
+        .nav-sticky {
+            backdrop-filter: blur(12px);
+            background: rgba(245,247,246,0.85);
+            border-bottom: 1px solid rgba(45,90,61,0.1);
+        }
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #2D5A3D, #3A7CA5);
+            border-radius: 2px;
+        }
+        .food-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+        }
+        .food-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 4px; height: 100%;
+            background: linear-gradient(to bottom, #B8860B, #C17817);
+        }
+        .budget-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: #E8EDE9;
+            overflow: hidden;
+        }
+        .budget-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        .weather-icon {
+            font-size: 48px;
+            background: linear-gradient(135deg, #3A7CA5, #2D5A3D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .photo-spot {
+            border-left: 3px solid transparent;
+            border-image: linear-gradient(to bottom, #B8860B, #C17817) 1;
+            transition: all 0.3s ease;
+        }
+        .photo-spot:hover {
+            background: rgba(184,134,11,0.05);
+            padding-left: 16px;
+        }
+        .tab-btn {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn.active {
+            color: #2D5A3D;
+            border-bottom-color: #2D5A3D;
+        }
+        .mountain-divider {
+            height: 40px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath d='M0,40 L100,15 L200,30 L350,5 L500,25 L600,10 L750,30 L900,8 L1050,28 L1200,15 L1200,40 Z' fill='%23E8EDE9'/%3E%3C/svg%3E") repeat-x center;
+            background-size: 1200px 40px;
+        }
+    </style>
+</head>
+<body class="text-ink">
+
+    <!-- Navigation -->
+    <nav id="nav" class="fixed top-0 left-0 right-0 z-50 nav-sticky py-3 px-6 hidden">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <span class="font-serif font-bold text-primary text-lg">十堰 · 仙山秀水</span>
+            <div class="flex gap-6 text-sm font-medium text-stone">
+                <a href="#itinerary" class="hover:text-primary transition-colors">行程安排</a>
+                <a href="#transport" class="hover:text-primary transition-colors">交通指南</a>
+                <a href="#budget" class="hover:text-primary transition-colors">预算明细</a>
+                <a href="#food" class="hover:text-primary transition-colors">美食推荐</a>
+                <a href="#photo" class="hover:text-primary transition-colors">打卡地</a>
+                <a href="#weather" class="hover:text-primary transition-colors">天气穿搭</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section min-h-[90vh] flex items-center justify-center text-white relative">
+        <div class="text-center relative z-10 px-6">
+            <div class="cloud-float mb-6">
+                <span class="material-symbols-outlined text-6xl opacity-60">landscape</span>
+            </div>
+            <p class="text-sm tracking-[0.3em] uppercase opacity-70 mb-4">SHIYAN · HUBEI · CHINA</p>
+            <h1 class="font-serif text-5xl md:text-7xl font-black mb-6 leading-tight">
+                十堰 3 日旅行攻略
+            </h1>
+            <p class="text-xl md:text-2xl font-light opacity-90 mb-2">仙山秀水 · 道法自然</p>
+            <p class="text-base opacity-60 mt-4 max-w-lg mx-auto">
+                车城探秘 · 武当问道 · 丹江揽胜<br>
+                3 人同行 · 7 月出发
+            </p>
+            <div class="flex gap-8 justify-center mt-10 text-sm opacity-80">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-lg">schedule</span>
+                    <span>3 天 2 晚</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-lg">group</span>
+                    <span>3 人出行</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-lg">train</span>
+                    <span>武汉出发</span>
+                </div>
+            </div>
+            <a href="#itinerary" class="inline-block mt-12 px-8 py-3 border border-white/30 rounded-full text-sm hover:bg-white/10 transition-all">
+                开始探索 ↓
+            </a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 py-16">
+
+        <!-- Trip Overview -->
+        <section class="mb-20 fade-in">
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-2xl p-6 card-hover shadow-sm border border-mist">
+                    <span class="material-symbols-outlined text-3xl text-primary mb-3">explore</span>
+                    <h3 class="font-bold text-lg mb-1">目的地</h3>
+                    <p class="text-stone text-sm">湖北十堰 · 武当山 · 丹江口</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 card-hover shadow-sm border border-mist">
+                    <span class="material-symbols-outlined text-3xl text-water mb-3">calendar_month</span>
+                    <h3 class="font-bold text-lg mb-1">行程周期</h3>
+                    <p class="text-stone text-sm">3 天 2 晚深度游</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 card-hover shadow-sm border border-mist">
+                    <span class="material-symbols-outlined text-3xl text-accent mb-3">payments</span>
+                    <h3 class="font-bold text-lg mb-1">人均预算</h3>
+                    <p class="text-stone text-sm">约 1750-2000 元</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 card-hover shadow-sm border border-mist">
+                    <span class="material-symbols-outlined text-3xl text-gold mb-3">star</span>
+                    <h3 class="font-bold text-lg mb-1">旅行亮点</h3>
+                    <p class="text-stone text-sm">世界遗产 · 亚洲天池 · 非遗美食</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Itinerary Section -->
+        <section id="itinerary" class="mb-20">
+            <h2 class="font-serif text-3xl font-bold mb-2 section-title">每日行程安排</h2>
+            <p class="text-stone mt-6 mb-10">车城烟火 → 武当问道 → 丹江揽湖，三天不走回头路</p>
+
+            <!-- Day 1 -->
+            <div class="timeline-line mb-12">
+                <div class="flex items-start gap-6">
+                    <div class="day-badge flex-shrink-0 mt-1">D1</div>
+                    <div class="flex-1">
+                        <div class="bg-white rounded-2xl p-8 shadow-sm border border-mist">
+                            <div class="flex items-center gap-3 mb-4">
+                                <h3 class="font-serif text-2xl font-bold text-accent">十堰市区 · 车城烟火</h3>
+                                <span class="bg-accent/10 text-accent text-xs px-3 py-1 rounded-full font-medium">中国卡车之都</span>
+                            </div>
+                            <p class="text-stone mb-6 text-sm">主题：初识十堰，品味本地烟火气，打卡博物馆与城市地标</p>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-primary bg-primary/10 rounded-lg py-1 text-center flex-shrink-0">06:30</div>
+                                    <div>
+                                        <p class="font-medium">武汉站乘高铁出发</p>
+                                        <p class="text-stone text-sm mt-1">汉十高铁至十堰东站，约 2 小时。提前在 12306 购票，二等座约 ¥200</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-primary bg-primary/10 rounded-lg py-1 text-center flex-shrink-0">08:40</div>
+                                    <div>
+                                        <p class="font-medium">抵达十堰东站 → 租车取车</p>
+                                        <p class="text-stone text-sm mt-1">在站内租车门店（神州/一嗨）提车，驱车前往市中心酒店放行李（约 20 分钟）</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-water bg-water/10 rounded-lg py-1 text-center flex-shrink-0">09:30</div>
+                                    <div>
+                                        <p class="font-medium">🍜 早午餐：郧阳三合汤</p>
+                                        <p class="text-stone text-sm mt-1">400 年非遗美食！红薯粉 + 牛肉片 + 牛肉馅饺子，酸辣鲜香。茅箭区街头巷尾皆有，¥12-18/碗</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-water bg-water/10 rounded-lg py-1 text-center flex-shrink-0">10:30</div>
+                                    <div>
+                                        <p class="font-medium">🏛️ 十堰博物馆</p>
+                                        <p class="text-stone text-sm mt-1">了解十堰汽车工业史与鄂西北文化，馆藏丰富。免费参观，约 1.5 小时</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-water bg-water/10 rounded-lg py-1 text-center flex-shrink-0">12:00</div>
+                                    <div>
+                                        <p class="font-medium">🚗 东风汽车博物馆 / 汽车模型博物馆</p>
+                                        <p class="text-stone text-sm mt-1">十堰"车城"的灵魂所在，东风商用车发源地。从第一辆军用卡车到现代商用车的发展历程</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-accent bg-accent/10 rounded-lg py-1 text-center flex-shrink-0">13:00</div>
+                                    <div>
+                                        <p class="font-medium">🍲 午餐：十堰牛肉面 + 糊辣汤</p>
+                                        <p class="text-stone text-sm mt-1">大块牛肉、劲道面条、香辣油。配一碗郧县糊辣汤，浓郁暖胃，完美搭配。人均 ¥20</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-accent bg-accent/10 rounded-lg py-1 text-center flex-shrink-0">14:30</div>
+                                    <div>
+                                        <p class="font-medium">🌳 四方山生态公园</p>
+                                        <p class="text-stone text-sm mt-1">十堰城区最高点之一，登顶可俯瞰全城。山间步道清幽凉爽，适合午后散步拍照</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-accent bg-accent/10 rounded-lg py-1 text-center flex-shrink-0">16:30</div>
+                                    <div>
+                                        <p class="font-medium">🛍️ 北京路步行街</p>
+                                        <p class="text-stone text-sm mt-1">十堰最热闹的商业街，逛街购物、品尝小吃。可买竹溪碗糕、武当山茶叶等特产</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-gold bg-gold/10 rounded-lg py-1 text-center flex-shrink-0">18:00</div>
+                                    <div>
+                                        <p class="font-medium">🍽️ 晚餐：竹溪蒸盆 / 瓦块鱼</p>
+                                        <p class="text-stone text-sm mt-1">品尝鄂西北宴席名菜，竹溪蒸盆一大盆荤素搭配，3 人分享正合适。人均 ¥50-70</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-stone bg-stone/10 rounded-lg py-1 text-center flex-shrink-0">20:00</div>
+                                    <div>
+                                        <p class="font-medium">🌃 夜游百二河生态走廊</p>
+                                        <p class="text-stone text-sm mt-1">沿河步道散步消食，夜景灯光秀，感受十堰的城市夜色与休闲氛围</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div class="timeline-line mb-12">
+                <div class="flex items-start gap-6">
+                    <div class="day-badge flex-shrink-0 mt-1">D2</div>
+                    <div class="flex-1">
+                        <div class="bg-white rounded-2xl p-8 shadow-sm border border-mist">
+                            <div class="flex items-center gap-3 mb-4">
+                                <h3 class="font-serif text-2xl font-bold text-primary">武当山 · 问道仙境</h3>
+                                <span class="bg-primary/10 text-primary text-xs px-3 py-1 rounded-full font-medium">世界文化遗产</span>
+                            </div>
+                            <p class="text-stone mb-6 text-sm">主题：登临金顶，朝拜道教圣地，感受云海仙境</p>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-primary bg-primary/10 rounded-lg py-1 text-center flex-shrink-0">06:30</div>
+                                    <div>
+                                        <p class="font-medium">自驾前往武当山</p>
+                                        <p class="text-stone text-sm mt-1">从市区驾车至武当山游客中心（30km / 约 40 分钟），停车场 ¥10-20。购买套票 ¥240/人</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-primary bg-primary/10 rounded-lg py-1 text-center flex-shrink-0">07:30</div>
+                                    <div>
+                                        <p class="font-medium">🚌 乘观光车进山</p>
+                                        <p class="text-stone text-sm mt-1">景区观光车 ¥76/人，无限次乘坐。景区 7:30 开园，建议早到避开人流</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-water bg-water/10 rounded-lg py-1 text-center flex-shrink-0">08:30</div>
+                                    <div>
+                                        <p class="font-medium">🏛️ 太子坡（复真观）</p>
+                                        <p class="text-stone text-sm mt-1">明代古建群，著名的"一柱十二梁"。红墙适合仰拍，线条感极强</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-water bg-water/10 rounded-lg py-1 text-center flex-shrink-0">10:00</div>
+                                    <div>
+                                        <p class="font-medium">🏔️ 紫霄宫</p>
+                                        <p class="text-stone text-sm mt-1">武当山最大道教宫观，背靠展旗峰，前临照壁山。门前溪流旁拍古建与流水</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-water bg-water/10 rounded-lg py-1 text-center flex-shrink-0">11:30</div>
+                                    <div>
+                                        <p class="font-medium">🍜 午餐：武当道家斋菜</p>
+                                        <p class="text-stone text-sm mt-1">紫霄宫附近餐馆，推荐太极豆腐、斋菜拼盘，人均 ¥40-60</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-accent bg-accent/10 rounded-lg py-1 text-center flex-shrink-0">13:00</div>
+                                    <div>
+                                        <p class="font-medium">⛰️ 南岩宫</p>
+                                        <p class="text-stone text-sm mt-1">绝壁之上的悬空古殿，龙头香闻名天下。栈道拍照绝佳，拍出悬崖建筑感</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-accent bg-accent/10 rounded-lg py-1 text-center flex-shrink-0">15:00</div>
+                                    <div>
+                                        <p class="font-medium">🏆 金顶（太和宫）</p>
+                                        <p class="text-stone text-sm mt-1">海拔 1612 米，天柱峰绝顶。可选索道上行（单程 ¥43），金殿为铜铸鎏金</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-gold bg-gold/10 rounded-lg py-1 text-center flex-shrink-0">17:30</div>
+                                    <div>
+                                        <p class="font-medium">🌅 金顶观日落</p>
+                                        <p class="text-stone text-sm mt-1">西侧观景台，夕阳将云海染成粉金色，是武当山最震撼的瞬间</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-stone bg-stone/10 rounded-lg py-1 text-center flex-shrink-0">19:00</div>
+                                    <div>
+                                        <p class="font-medium">🏨 入住武当山镇酒店</p>
+                                        <p class="text-stone text-sm mt-1">下山后入住武当山镇，逛玉虚宫仿古街夜市，品尝武当特色小吃。参考价 ¥200-400/间</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 3 -->
+            <div class="mb-12">
+                <div class="flex items-start gap-6">
+                    <div class="day-badge flex-shrink-0 mt-1">D3</div>
+                    <div class="flex-1">
+                        <div class="bg-white rounded-2xl p-8 shadow-sm border border-mist">
+                            <div class="flex items-center gap-3 mb-4">
+                                <h3 class="font-serif text-2xl font-bold text-water">丹江口 · 亚洲天池</h3>
+                                <span class="bg-water/10 text-water text-xs px-3 py-1 rounded-full font-medium">南水北调源头</span>
+                            </div>
+                            <p class="text-stone mb-6 text-sm">主题：环湖揽胜，品丹江鲜鱼，赏千岛湖光后返程</p>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-primary bg-primary/10 rounded-lg py-1 text-center flex-shrink-0">07:00</div>
+                                    <div>
+                                        <p class="font-medium">🏛️ 玉虚宫晨游</p>
+                                        <p class="text-stone text-sm mt-1">武当规模最大的明代皇家宫观遗址，清晨光影最佳，游人稀少，适合拍照</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-primary bg-primary/10 rounded-lg py-1 text-center flex-shrink-0">08:30</div>
+                                    <div>
+                                        <p class="font-medium">🚗 自驾前往丹江口（约 50 分钟）</p>
+                                        <p class="text-stone text-sm mt-1">从武当山镇驾车前往丹江口市区（40km），沿途风景秀丽</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-water bg-water/10 rounded-lg py-1 text-center flex-shrink-0">10:00</div>
+                                    <div>
+                                        <p class="font-medium">🌊 沧浪海旅游港 · 游船</p>
+                                        <p class="text-stone text-sm mt-1">乘船游览丹江口水库，远眺大坝、农夫山泉取水基地。玻璃观景舱 360° 拍大片</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-water bg-water/10 rounded-lg py-1 text-center flex-shrink-0">11:30</div>
+                                    <div>
+                                        <p class="font-medium">🍲 午餐：丹江鱼鲜</p>
+                                        <p class="text-stone text-sm mt-1">丹江口水库湖边餐馆，必点红烧翘嘴鲌、清炖汉江鱼，人均 ¥60-80</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-accent bg-accent/10 rounded-lg py-1 text-center flex-shrink-0">13:00</div>
+                                    <div>
+                                        <p class="font-medium">🏞️ 丹江口大坝</p>
+                                        <p class="text-stone text-sm mt-1">南水北调中线工程源头，亚洲最大人工淡水湖。水质常年 Ⅱ 类，碧绿如翡翠</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-accent bg-accent/10 rounded-lg py-1 text-center flex-shrink-0">14:30</div>
+                                    <div>
+                                        <p class="font-medium">📸 环库公路打卡</p>
+                                        <p class="text-stone text-sm mt-1">沿库区公路短途驾车，湖风拂面，百喜岛玄武岩群适合拍照打卡</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-gold bg-gold/10 rounded-lg py-1 text-center flex-shrink-0">16:00</div>
+                                    <div>
+                                        <p class="font-medium">🚗 自驾返回十堰东站还车</p>
+                                        <p class="text-stone text-sm mt-1">丹江口至十堰东站约 50 分钟车程，在租车门店还车办手续</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-4 p-4 bg-cloud rounded-xl">
+                                    <div class="w-16 text-xs font-bold text-gold bg-gold/10 rounded-lg py-1 text-center flex-shrink-0">17:30</div>
+                                    <div>
+                                        <p class="font-medium">🚄 十堰东站乘高铁返回武汉</p>
+                                        <p class="text-stone text-sm mt-1">约 2 小时抵达武汉站，结束愉快的三日之旅！</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transport Section -->
+        <section id="transport" class="mb-20">
+            <h2 class="font-serif text-3xl font-bold mb-2 section-title">交通指南</h2>
+            <p class="text-stone mt-6 mb-10">高铁抵达 + 当地租车，自由灵活串联全部景点</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- 高铁 -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm border border-mist card-hover">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-2xl text-primary">train</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">城际交通：高铁往返</h3>
+                            <span class="text-xs text-primary bg-primary/5 px-2 py-0.5 rounded">武汉 ↔ 十堰</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between items-center py-2 border-b border-mist">
+                            <span class="text-stone">线路</span>
+                            <span class="font-medium">汉十高铁（武汉站→十堰东站）</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-mist">
+                            <span class="text-stone">时长</span>
+                            <span class="font-medium">约 2 小时</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-mist">
+                            <span class="text-stone">票价</span>
+                            <span class="font-medium">二等座 ≈ ¥200 / 人</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2">
+                            <span class="text-stone">班次</span>
+                            <span class="font-medium">每天 30+ 班，06:30 - 21:00</span>
+                        </div>
+                    </div>
+                    <div class="mt-5 p-3 bg-primary/5 rounded-lg text-xs text-stone">
+                        💡 西十高铁已于 2026 年 6 月 30 日开通，十堰现为鄂陕高铁枢纽
+                    </div>
+                </div>
+
+                <!-- 当地租车 -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm border border-mist card-hover">
+                    <div class="flex items-center gap-3 mb-5">
+                        <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-2xl text-accent">directions_car</span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">当地交通：租车自驾</h3>
+                            <span class="text-xs text-accent bg-accent/5 px-2 py-0.5 rounded">推荐方案</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between items-center py-2 border-b border-mist">
+                            <span class="text-stone">取/还车点</span>
+                            <span class="font-medium">十堰东站门店（神州 / 一嗨 / 携程）</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-mist">
+                            <span class="text-stone">租期</span>
+                            <span class="font-medium">3 天（到站取车，返程前还车）</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-mist">
+                            <span class="text-stone">日租费</span>
+                            <span class="font-medium">经济型 ≈ ¥150-200 / 天</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2">
+                            <span class="text-stone">3 天总费用</span>
+                            <span class="font-medium text-accent">≈ ¥500-600（含油费 + 停车费）</span>
+                        </div>
+                    </div>
+                    <div class="mt-5 p-3 bg-accent/5 rounded-lg text-xs text-stone">
+                        💡 3 人分摊租车费比打车更划算！市区→武当山 30km，武当山→丹江口 40km，一路自由停靠
+                    </div>
+                </div>
+            </div>
+
+            <!-- 租车优势 & 路线 -->
+            <div class="mt-8 bg-white rounded-2xl p-8 shadow-sm border border-mist">
+                <h3 class="font-bold text-lg mb-5 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-accent">route</span>
+                    自驾路线规划
+                </h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="p-4 bg-cloud rounded-xl">
+                        <p class="font-medium mb-2">📍 D1 市区游览</p>
+                        <p class="text-sm text-stone">十堰东站取车 → 市区博物馆/公园/步行街。市区停车方便，商场/景点均有停车场</p>
+                    </div>
+                    <div class="p-4 bg-cloud rounded-xl">
+                        <p class="font-medium mb-2">📍 D2 武当山</p>
+                        <p class="text-sm text-stone">市区 → 武当山游客中心（30km / 40 分钟）。景区有大型停车场，¥10-20/次。山内乘观光车</p>
+                    </div>
+                    <div class="p-4 bg-cloud rounded-xl">
+                        <p class="font-medium mb-2">📍 D3 丹江口 → 返程</p>
+                        <p class="text-sm text-stone">武当山 → 丹江口（40km / 50 分钟）→ 环库公路兜风 → 十堰东站还车</p>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 bg-gradient-to-r from-accent/5 to-primary/5 rounded-xl">
+                    <p class="text-sm font-medium text-accent mb-2">🚗 租车 Tips</p>
+                    <ul class="text-xs text-stone space-y-1">
+                        <li>• 提前在神州租车 / 一嗨租车 / 携程租车 APP 预约，到站直接取车</li>
+                        <li>• 建议选紧凑型 SUV（如哈弗H6），山路更稳，3 人 + 行李更宽敞</li>
+                        <li>• 武当山景区内不能开私家车，需换乘景区观光车（¥76/人）</li>
+                        <li>• 环库公路路况良好，风景绝美，非常适合自驾兜风拍照</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Budget Section -->
+        <section id="budget" class="mb-20">
+            <h2 class="font-serif text-3xl font-bold mb-2 section-title">预算明细</h2>
+            <p class="text-stone mt-6 mb-10">3 人总预算约 ¥5200-6000，人均约 ¥1750-2000</p>
+
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-mist">
+                <!-- Budget Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b-2 border-primary/20">
+                                <th class="text-left py-3 font-bold text-primary">项目</th>
+                                <th class="text-left py-3 font-bold text-primary">明细</th>
+                                <th class="text-right py-3 font-bold text-primary">单价/人</th>
+                                <th class="text-right py-3 font-bold text-primary">3 人合计</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-mist">
+                            <tr>
+                                <td class="py-3 font-medium">🚄 大交通</td>
+                                <td class="py-3 text-stone">武汉↔十堰高铁往返</td>
+                                <td class="py-3 text-right">¥400</td>
+                                <td class="py-3 text-right font-bold">¥1200</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 font-medium">🎫 景区门票</td>
+                                <td class="py-3 text-stone">武当山套票 240 + 索道 85 + 丹江口游船 120</td>
+                                <td class="py-3 text-right">¥445</td>
+                                <td class="py-3 text-right font-bold">¥1335</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 font-medium">🏨 住宿</td>
+                                <td class="py-3 text-stone">2 晚（市区 1 晚 + 武当山 1 晚），双标间</td>
+                                <td class="py-3 text-right">¥250</td>
+                                <td class="py-3 text-right font-bold">¥750</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 font-medium">🍜 餐饮</td>
+                                <td class="py-3 text-stone">3 天早中晚（人均 ¥80-120/天）</td>
+                                <td class="py-3 text-right">¥300</td>
+                                <td class="py-3 text-right font-bold">¥900</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 font-medium">🚗 当地租车</td>
+                                <td class="py-3 text-stone">租车 3 天 + 油费 + 停车费（3 人均摊）</td>
+                                <td class="py-3 text-right">¥200</td>
+                                <td class="py-3 text-right font-bold">¥600</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 font-medium">🛍️ 其他</td>
+                                <td class="py-3 text-stone">特产购物 + 应急备用</td>
+                                <td class="py-3 text-right">¥150</td>
+                                <td class="py-3 text-right font-bold">¥450</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="border-t-2 border-primary/20">
+                                <td colspan="2" class="py-4 font-bold text-lg text-primary">总 计</td>
+                                <td class="py-4 text-right font-bold text-lg text-primary">¥1745</td>
+                                <td class="py-4 text-right font-bold text-lg text-primary">¥5235</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Budget Chart -->
+                <div class="mt-8">
+                    <div id="budgetChart" style="width:100%;height:320px;"></div>
+                </div>
+
+                <!-- Tips -->
+                <div class="mt-6 grid md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-primary/5 rounded-xl text-sm">
+                        <p class="font-medium text-primary mb-1">💰 省钱 Tips</p>
+                        <ul class="text-stone space-y-1 text-xs">
+                            <li>• 武当山门票网上提前预约可享优惠</li>
+                            <li>• 住宿选武当山镇民宿，性价比更高</li>
+                            <li>• 3 人租车比分别打车更划算，人均 ¥200/3 天</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-water/5 rounded-xl text-sm">
+                        <p class="font-medium text-water mb-1">📌 注意事项</p>
+                        <ul class="text-stone space-y-1 text-xs">
+                            <li>• 武当山套票 3 日有效，观光车不限次数</li>
+                            <li>• 金顶需分时预约，建议提前 1 天约好</li>
+                            <li>• 暑期为旺季，建议提前订酒店</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accommodation Section -->
+        <section id="accommodation" class="mb-20">
+            <h2 class="font-serif text-3xl font-bold mb-2 section-title">住宿推荐</h2>
+            <p class="text-stone mt-6 mb-10">根据行程安排，推荐 2 晚分段住宿</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-xs bg-accent/10 text-accent px-3 py-1 rounded-full font-medium">第 1 晚</span>
+                        <span class="text-xs text-stone">十堰市区</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-3">十堰城区酒店</h3>
+                    <div class="space-y-2 text-sm text-stone">
+                        <p>🏨 <strong>推荐</strong>：十堰万达嘉华 / 希尔顿欢朋</p>
+                        <p>🏨 <strong>性价比</strong>：如家、汉庭（北京路附近）</p>
+                        <p>💰 参考价：¥200-350 / 间·晚</p>
+                        <p>✅ 交通便利，周边配套完善，逛夜市方便</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">第 2 晚</span>
+                        <span class="text-xs text-stone">武当山景区附近</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-3">武当山镇 / 景区酒店</h3>
+                    <div class="space-y-2 text-sm text-stone">
+                        <p>🏨 <strong>推荐</strong>：武当山建国饭店（景区内，近金顶索道）</p>
+                        <p>🏨 <strong>性价比</strong>：武当山镇民宿 / 如家快捷</p>
+                        <p>💰 参考价：¥200-400 / 间·晚</p>
+                        <p>✅ 便于次日继续游览玉虚宫，道家文化氛围浓郁</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Food Section -->
+        <section id="food" class="mb-20">
+            <h2 class="font-serif text-3xl font-bold mb-2 section-title">美食必吃 TOP 10</h2>
+            <p class="text-stone mt-6 mb-10">鄂西北的味觉盛宴，每一口都是老十堰的魂</p>
+
+            <div class="grid md:grid-cols-2 gap-5">
+                <!-- Food 1 -->
+                <div class="food-card bg-white p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-bold text-sm">01</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">郧阳三合汤</h4>
+                            <p class="text-xs text-accent mb-2">🏆 400 年非遗 · 十堰人的早餐 C 位</p>
+                            <p class="text-sm text-stone">红薯粉 + 牛肉片 + 牛肉馅饺子，浇上二十多种香料熬出的老汤，酸辣鲜香。来十堰不吃三合汤，等于白来！</p>
+                            <p class="text-xs text-primary mt-2">📍 茅箭区、张湾区街头 | 💰 ¥12-18/碗</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food 2 -->
+                <div class="food-card bg-white p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-bold text-sm">02</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">十堰牛肉面</h4>
+                            <p class="text-xs text-accent mb-2">🥩 汤浓肉大 · 辣油香而不燥</p>
+                            <p class="text-sm text-stone">与兰州拉面完全不同！汤底浓郁，牛肉大块，面条劲道。辣油是灵魂——香而不燥，辣而不猛。</p>
+                            <p class="text-xs text-primary mt-2">📍 茅箭区北京路小巷 | 💰 ¥12-18/碗</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food 3 -->
+                <div class="food-card bg-white p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-bold text-sm">03</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">丹江口翘嘴鲌</h4>
+                            <p class="text-xs text-accent mb-2">🐟 国家地理标志保护产品</p>
+                            <p class="text-sm text-stone">丹江口水库特有鱼类，"肉白而细嫩，味美而不腥"。红烧、清蒸皆宜，自古被视为上等名贵鱼类。</p>
+                            <p class="text-xs text-primary mt-2">📍 丹江口湖边餐馆 | 💰 ¥60-100/份</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food 4 -->
+                <div class="food-card bg-white p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-bold text-sm">04</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">武当道家斋菜</h4>
+                            <p class="text-xs text-accent mb-2">🧘 佛道两家素菜精髓</p>
+                            <p class="text-sm text-stone">取武当本地原生态蔬菜、菌菇，烹饪精湛，口感清淡鲜美。太极豆腐、斋菜拼盘是必点。</p>
+                            <p class="text-xs text-primary mt-2">📍 紫霄宫 / 太和宫周边 | 💰 ¥40-60/人</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food 5 -->
+                <div class="food-card bg-white p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-bold text-sm">05</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">郧阳瓦块鱼</h4>
+                            <p class="text-xs text-accent mb-2">🍽️ 郧阳区特色名菜</p>
+                            <p class="text-sm text-stone">鱼块似土瓦而得名，有清蒸和炸烩两种吃法。清蒸鱼色白肉嫩味鲜，焦炸色黄鲜美可口。</p>
+                            <p class="text-xs text-primary mt-2">📍 郧阳区 / 十堰市区餐馆 | 💰 ¥40-60/份</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food 6 -->
+                <div class="food-card bg-white p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-bold text-sm">06</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">酸浆面</h4>
+                            <p class="text-xs text-accent mb-2">🍜 十堰传统面食</p>
+                            <p class="text-sm text-stone">用酸浆水下面，酸香爽口，开胃解暑。夏天来一碗，清爽解腻，是十堰人的消暑利器。</p>
+                            <p class="text-xs text-primary mt-2">📍 十堰市区面馆 | 💰 ¥10-15/碗</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food 7 -->
+                <div class="food-card bg-white p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-bold text-sm">07</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">郧县糊辣汤</h4>
+                            <p class="text-xs text-accent mb-2">🥣 浓郁暖胃的早餐伴侣</p>
+                            <p class="text-sm text-stone">胡辣汤配烧饼，是十堰人的经典早餐搭配。汤汁浓稠、胡椒香浓，驱寒暖胃。</p>
+                            <p class="text-xs text-primary mt-2">📍 十堰各早餐店 | 💰 ¥8-12/碗</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food 8 -->
+                <div class="food-card bg-white p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-bold text-sm">08</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">竹溪蒸盆</h4>
+                            <p class="text-xs text-accent mb-2">🍲 鄂西北宴席压轴大菜</p>
+                            <p class="text-sm text-stone">大盆蒸制，内含鸡鸭鱼肉、菌菇蛋饺。一盆菜汇聚山珍河鲜，热气腾腾，年味十足。</p>
+                            <p class="text-xs text-primary mt-2">📍 十堰特色餐馆 | 💰 ¥100-150/盆（3-4 人份）</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food 9 -->
+                <div class="food-card bg-white p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-bold text-sm">09</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">竹溪碗糕</h4>
+                            <p class="text-xs text-accent mb-2">🍰 500 年历史传统甜点</p>
+                            <p class="text-sm text-stone">白米和黄豆磨浆蒸制，松软香甜，口感细腻。既可当早餐，也可做点心，老少皆宜。</p>
+                            <p class="text-xs text-primary mt-2">📍 武当山仿古街 / 竹溪特产店 | 💰 ¥5-8/份</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food 10 -->
+                <div class="food-card bg-white p-6 shadow-sm border border-mist card-hover">
+                    <div class="flex items-start gap-4">
+                        <div class="w-10 h-10 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-gold font-bold text-sm">10</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-base mb-1">黄龙鱼头</h4>
+                            <p class="text-xs text-accent mb-2">🐟 鲜嫩滋补的地方名菜</p>
+                            <p class="text-sm text-stone">选用丹江水库大头鱼，鱼头炖汤浓白如乳，鲜美无比。搭配豆腐、粉条，滋补又解馋。</p>
+                            <p class="text-xs text-primary mt-2">📍 十堰 / 丹江口鱼庄 | 💰 ¥50-80/份</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Spots Section -->
+        <section id="photo" class="mb-20">
+            <h2 class="font-serif text-3xl font-bold mb-2 section-title">拍照打卡地</h2>
+            <p class="text-stone mt-6 mb-10">这些机位让你的朋友圈 C 位出道</p>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-mist card-hover">
+                    <div class="h-3 bg-gradient-to-r from-gold to-accent"></div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="material-symbols-outlined text-gold">photo_camera</span>
+                            <h4 class="font-bold">金顶日出 / 日落</h4>
+                        </div>
+                        <p class="text-sm text-stone mb-3">海拔 1612 米，云海翻涌，金殿鎏金在光线下闪耀。日出 6:00-7:00，日落 17:30-18:30。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">云海</span>
+                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">日出</span>
+                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">古建筑</span>
+                        </div>
+                        <p class="text-xs text-stone mt-3">📷 Tips：西侧观景台最佳，提前 1 小时占位</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-mist card-hover">
+                    <div class="h-3 bg-gradient-to-r from-primary to-water"></div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="material-symbols-outlined text-primary">photo_camera</span>
+                            <h4 class="font-bold">南岩宫悬崖栈道</h4>
+                        </div>
+                        <p class="text-sm text-stone mb-3">绝壁之上的道教宫殿，龙形石廊悬崖边线条感极强。从侧面取景，拍出悬崖建筑的震撼感。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded">悬崖</span>
+                            <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded">古建</span>
+                            <span class="text-xs bg-primary/10 text-primary px-2 py-1 rounded">仙气</span>
+                        </div>
+                        <p class="text-xs text-stone mt-3">📷 Tips：避开正面人群，侧面角度最出片</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-mist card-hover">
+                    <div class="h-3 bg-gradient-to-r from-water to-primary"></div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="material-symbols-outlined text-water">photo_camera</span>
+                            <h4 class="font-bold">紫霄宫殿宇飞檐</h4>
+                        </div>
+                        <p class="text-sm text-stone mb-3">背靠展旗峰的道教宫观，殿宇飞檐与青山相融。门前溪流旁拍古建与流水，氛围绝佳。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-water/10 text-water px-2 py-1 rounded">古风</span>
+                            <span class="text-xs bg-water/10 text-water px-2 py-1 rounded">溪流</span>
+                            <span class="text-xs bg-water/10 text-water px-2 py-1 rounded">飞檐</span>
+                        </div>
+                        <p class="text-xs text-stone mt-3">📷 Tips：拍殿宇和飞檐，简单直接容易出片</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-mist card-hover">
+                    <div class="h-3 bg-gradient-to-r from-accent to-gold"></div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="material-symbols-outlined text-accent">photo_camera</span>
+                            <h4 class="font-bold">太子坡红墙</h4>
+                        </div>
+                        <p class="text-sm text-stone mb-3">明代红色院墙蜿蜒曲折，仰拍线条感极强。雨后雾气缭绕时更添古韵。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-accent/10 text-accent px-2 py-1 rounded">红墙</span>
+                            <span class="text-xs bg-accent/10 text-accent px-2 py-1 rounded">古建</span>
+                            <span class="text-xs bg-accent/10 text-accent px-2 py-1 rounded">线条</span>
+                        </div>
+                        <p class="text-xs text-stone mt-3">📷 Tips：仰角拍摄红墙，线条最有张力</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-mist card-hover">
+                    <div class="h-3 bg-gradient-to-r from-water to-accent"></div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="material-symbols-outlined text-water">photo_camera</span>
+                            <h4 class="font-bold">丹江口水库千岛湖景</h4>
+                        </div>
+                        <p class="text-sm text-stone mb-3">亚洲第一大人工淡水湖，300+ 岛屿散落湖面。沧浪海玻璃观景舱 360° 无死角拍大片。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-water/10 text-water px-2 py-1 rounded">湖景</span>
+                            <span class="text-xs bg-water/10 text-water px-2 py-1 rounded">千岛</span>
+                            <span class="text-xs bg-water/10 text-water px-2 py-1 rounded">日落</span>
+                        </div>
+                        <p class="text-xs text-stone mt-3">📷 Tips：日出薄雾 + 日落剪影效果绝佳</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-mist card-hover">
+                    <div class="h-3 bg-gradient-to-r from-gold to-primary"></div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="material-symbols-outlined text-gold">photo_camera</span>
+                            <h4 class="font-bold">玉虚宫遗址</h4>
+                        </div>
+                        <p class="text-sm text-stone mb-3">武当规模最大的明代皇家宫观遗址，残垣断壁中透出历史沧桑感。适合拍人文纪实风。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">遗址</span>
+                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">古建</span>
+                            <span class="text-xs bg-gold/10 text-gold px-2 py-1 rounded">人文</span>
+                        </div>
+                        <p class="text-xs text-stone mt-3">📷 Tips：清晨光影最佳，对比残垣与天空</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Weather Section -->
+        <section id="weather" class="mb-20">
+            <h2 class="font-serif text-3xl font-bold mb-2 section-title">天气与穿搭建议</h2>
+            <p class="text-stone mt-6 mb-10">8 月十堰高温多雨，做好防暑防雨准备</p>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <!-- Weather Info -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm border border-mist">
+                    <h3 class="font-bold text-lg mb-5 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-water">thermostat</span>
+                        8 月气候概况
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-cloud rounded-lg">
+                            <span class="text-sm font-medium">平均气温</span>
+                            <span class="text-sm text-primary font-bold">23°C ~ 33°C</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-cloud rounded-lg">
+                            <span class="text-sm font-medium">白天最高</span>
+                            <span class="text-sm text-accent font-bold">30°C ~ 38°C</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-cloud rounded-lg">
+                            <span class="text-sm font-medium">夜间最低</span>
+                            <span class="text-sm text-water font-bold">21°C ~ 27°C</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-cloud rounded-lg">
+                            <span class="text-sm font-medium">降雨情况</span>
+                            <span class="text-sm text-stone font-bold">阵雨频繁（约 13 天/月）</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-cloud rounded-lg">
+                            <span class="text-sm font-medium">武当山顶</span>
+                            <span class="text-sm text-primary font-bold">约 22°C，比市区低 8-10°C</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clothing Advice -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm border border-mist">
+                    <h3 class="font-bold text-lg mb-5 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-accent">checkroom</span>
+                        穿搭建议
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-cloud rounded-xl">
+                            <p class="font-medium text-sm mb-2">👕 日常穿搭</p>
+                            <p class="text-xs text-stone">速干短袖 / T 恤 + 短裤 / 薄长裤。选择透气吸汗的轻棉或速干面料</p>
+                        </div>
+                        <div class="p-4 bg-cloud rounded-xl">
+                            <p class="font-medium text-sm mb-2">🧥 山顶必备</p>
+                            <p class="text-xs text-stone">薄外套 / 防风衣。武当山顶温差大，清晨和傍晚较凉，务必携带</p>
+                        </div>
+                        <div class="p-4 bg-cloud rounded-xl">
+                            <p class="font-medium text-sm mb-2">👟 鞋子</p>
+                            <p class="text-xs text-stone">防滑徒步鞋 / 运动鞋。山路湿滑，切勿穿凉鞋或高跟鞋登山</p>
+                        </div>
+                        <div class="p-4 bg-cloud rounded-xl">
+                            <p class="font-medium text-sm mb-2">☂️ 雨具防晒</p>
+                            <p class="text-xs text-stone">便携雨伞 / 雨衣 + 防晒霜 + 遮阳帽 + 墨镜。8 月阵雨说来就来</p>
+                        </div>
+                        <div class="p-4 bg-cloud rounded-xl">
+                            <p class="font-medium text-sm mb-2">🎒 随身装备</p>
+                            <p class="text-xs text-stone">驱蚊喷雾、充电宝、保温杯（山上补水）、少量现金</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather Tips -->
+            <div class="bg-gradient-to-r from-primary/5 to-water/5 rounded-2xl p-6 border border-mist">
+                <h3 class="font-bold text-sm text-primary mb-3">⚠️ 特别提醒</h3>
+                <div class="grid md:grid-cols-3 gap-4 text-xs text-stone">
+                    <div class="flex items-start gap-2">
+                        <span class="text-primary">•</span>
+                        <span>武当山登山建议上午出发，14 点前下撤避雷。午后雷阵雨多发</span>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="text-primary">•</span>
+                        <span>山林蚊虫较多，傍晚外出建议穿长袖长裤、喷驱蚊液</span>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="text-primary">•</span>
+                        <span>高温高湿天气注意补水防暑，少量多次饮用淡盐水或电解质水</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Packing List -->
+        <section class="mb-20">
+            <h2 class="font-serif text-3xl font-bold mb-2 section-title">行前清单</h2>
+            <p class="text-stone mt-6 mb-10">出发前对照检查，确保万无一失</p>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-mist">
+                    <h4 class="font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm text-primary">badge</span>
+                        证件与预约
+                    </h4>
+                    <ul class="space-y-2 text-sm text-stone">
+                        <li class="flex items-center gap-2"><span class="text-primary">☐</span> 身份证</li>
+                        <li class="flex items-center gap-2"><span class="text-primary">☐</span> 高铁票（提前购买）</li>
+                        <li class="flex items-center gap-2"><span class="text-primary">☐</span> 武当山门票预约</li>
+                        <li class="flex items-center gap-2"><span class="text-primary">☐</span> 金顶分时预约</li>
+                        <li class="flex items-center gap-2"><span class="text-primary">☐</span> 酒店预订确认</li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-mist">
+                    <h4 class="font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm text-accent">backpack</span>
+                        随身物品
+                    </h4>
+                    <ul class="space-y-2 text-sm text-stone">
+                        <li class="flex items-center gap-2"><span class="text-accent">☐</span> 防滑运动鞋 / 徒步鞋</li>
+                        <li class="flex items-center gap-2"><span class="text-accent">☐</span> 薄外套 / 防风衣</li>
+                        <li class="flex items-center gap-2"><span class="text-accent">☐</span> 便携雨衣 / 折叠伞</li>
+                        <li class="flex items-center gap-2"><span class="text-accent">☐</span> 防晒霜 + 遮阳帽</li>
+                        <li class="flex items-center gap-2"><span class="text-accent">☐</span> 驱蚊喷雾</li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-mist">
+                    <h4 class="font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm text-water">devices</span>
+                        电子设备
+                    </h4>
+                    <ul class="space-y-2 text-sm text-stone">
+                        <li class="flex items-center gap-2"><span class="text-water">☐</span> 手机 + 充电宝（2 万毫安）</li>
+                        <li class="flex items-center gap-2"><span class="text-water">☐</span> 相机 / 运动相机</li>
+                        <li class="flex items-center gap-2"><span class="text-water">☐</span> 数据线</li>
+                        <li class="flex items-center gap-2"><span class="text-water">☐</span> 保温杯</li>
+                        <li class="flex items-center gap-2"><span class="text-water">☐</span> 少量现金（山上信号差）</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-ink text-white/70 py-16">
+        <div class="max-w-6xl mx-auto px-6">
+            <!-- Producer Section -->
+            <div class="text-center mb-10 pb-10 border-b border-white/10">
+                <p class="text-sm text-white/50 mb-4">出品人</p>
+                <p class="font-serif text-2xl text-white/90 font-bold mb-6">王栋</p>
+                <div class="inline-block bg-white rounded-2xl p-3 shadow-lg">
+                    <img src="./qrcode.jpeg" alt="扫码添加好友" class="w-40 h-40 rounded-lg object-cover">
+                </div>
+                <p class="text-xs text-white/40 mt-4">扫码添加微信，一起结伴出行 🤝</p>
+            </div>
+            <!-- Footer Info -->
+            <div class="text-center">
+                <p class="font-serif text-xl text-white/90 mb-2">十堰 · 仙山秀水之旅</p>
+                <p class="text-sm mb-4">车城探秘 · 武当问道 · 丹江揽胜</p>
+                <p class="text-xs text-white/40">行程规划仅供参考，实际出行请以景区官方信息为准 | 2026 年 8 月</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav');
+            if (window.scrollY > 300) {
+                nav.classList.remove('hidden');
+            } else {
+                nav.classList.add('hidden');
+            }
+        });
+
+        // Budget Chart
+        const budgetChart = echarts.init(document.getElementById('budgetChart'));
+        const budgetOption = {
+            tooltip: {
+                trigger: 'item',
+                formatter: '{b}: ¥{c} ({d}%)'
+            },
+            legend: {
+                orient: 'vertical',
+                right: '5%',
+                top: 'center',
+                textStyle: { color: '#6B7B6E', fontSize: 12 }
+            },
+            series: [{
+                name: '预算分布',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                center: ['35%', '50%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 8,
+                    borderColor: '#fff',
+                    borderWidth: 3
+                },
+                label: { show: false },
+                emphasis: {
+                    label: { show: true, fontSize: 14, fontWeight: 'bold' }
+                },
+                labelLine: { show: false },
+                data: [
+                    { value: 1200, name: '大交通(高铁)', itemStyle: { color: '#2D5A3D' } },
+                    { value: 1335, name: '景区门票', itemStyle: { color: '#3A7CA5' } },
+                    { value: 750, name: '住宿', itemStyle: { color: '#C17817' } },
+                    { value: 900, name: '餐饮', itemStyle: { color: '#B8860B' } },
+                    { value: 600, name: '当地租车', itemStyle: { color: '#6B7B6E' } },
+                    { value: 450, name: '其他', itemStyle: { color: '#8B6914' } }
+                ]
+            }]
+        };
+        budgetChart.setOption(budgetOption);
+
+        // Responsive chart
+        window.addEventListener('resize', () => {
+            budgetChart.resize();
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = '0.1s';
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
+
